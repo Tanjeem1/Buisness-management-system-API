@@ -21,7 +21,7 @@
  psycopg2-binary==2.9.10
  pyjwt==2.10.1
  pymysql==1.1.2
- pymysql==1.1.2
+ mysqlclient==2.3.4
  python-decouple==3.8
  requests==2.32.4
  sqlparse==0.5.3
@@ -30,3 +30,4 @@
  tzdata==2025.2
  urllib3==2.5.0
  django-mathfilters==1.0.0
+ django-cors-headers==4.9.0

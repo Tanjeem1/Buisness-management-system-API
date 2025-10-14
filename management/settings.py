@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-(@xy$6d$y@--dzz*$$956$mv)uf)-!yw&3pp6xcdibthkrgj=b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# <-- CHANGE HERE: It's good practice to add your hosts even in development.
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.102']
 
 
 # Application definition
@@ -38,12 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',  # App is correctly installed
     'rest_framework.authtoken',
     'mathfilters',
     'core',
 ]
 
+# <-- CHANGE HERE: The order of middleware is critical.
+# CorsMiddleware must be placed at the top.
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'management.urls'
 
@@ -77,12 +83,28 @@ WSGI_APPLICATION = 'management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+        # for PostgreSQL
+         #"ENGINE": "django.db.backends.postgresql_psycopg2",
+         #'PORT': '5432',   # for PostgreSQL
+        #'NAME': 'buisness_management',
+        #'USER': 'postgres',
+        #'PASSWORD': '123456',
+        #'HOST': 'localhost',
+
+           # for MySQl
+           'ENGINE': 'django.db.backends.mysql',
+           'NAME': 'pabnlylf_pabnabazar',      # Database name from cPanel
+           'USER': 'pabnlylf',       # Database user from cPanel
+           'PASSWORD': 'QbeUduuTMtvA',   # Password you set
+           'HOST': 'localhost',
+           'PORT': '3306',
+       }
+   }
+    
+
 
 
 # Password validation
@@ -129,7 +151,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -142,7 +163,20 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'core.User'  # Use custom User model
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+
+# <-- CHANGE HERE: Add this section to define which frontends can access your API.
+# settings.py
+
+CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOWED_ORIGINS = [
+ #   "http://localhost:8080",
+  #  "http://127.0.0.1:8080",
+   # "http://192.168.0.102:8080", # Your old IP, can be kept
+    #"http://172.28.48.1:8080",    # <-- ADD THIS NEW LINE
+#]
+
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://192.168.0.102:8080', 'http://localhost:8080']
 
 # For development - disable CSRF for API endpoints
 # In production, you should use proper CSRF tokens
